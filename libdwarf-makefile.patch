@@ -1,0 +1,33 @@
+--- dwarf-20070703/dwarfdump/Makefile.in.orig	2007-07-03 19:37:21.000000000 -0400
++++ dwarf-20070703/dwarfdump/Makefile.in	2007-07-30 11:29:54.672110755 -0400
+@@ -11,7 +11,7 @@
+ prefix =	@prefix@
+ exec_prefix =	@exec_prefix@
+ bindir =	$(exec_prefix)/bin
+-libdir =	$(exec_prefix)/lib
++sysconfdir =	@sysconfdir@
+ mandir = 	@mandir@
+ man1dir =       $(mandir)/man1
+ 
+@@ -27,7 +27,7 @@
+ DEFS =		@DEFS@
+ LIBS =		@LIBS@ -L../libdwarf -ldwarf -lelf
+ INCLUDES =	-I. -I$(srcdir) -I$(srcdir)/../libdwarf
+-CFLAGS =	@CFLAGS@ $(INCLUDES) -DCONFPREFIX=${libdir}
++CFLAGS =	@CFLAGS@ $(INCLUDES) -DCONFPREFIX=${sysconfdir}
+ LDFLAGS =	@LDFLAGS@  $(LIBS)
+ 
+ # ../libdwarf gets us to local headers
+@@ -110,9 +110,9 @@
+ 
+ 
+ install: all
+-	$(INSTALL) dwarfdump $(bindir)/dwarfdump
+-	$(INSTALL) $(srcdir)/dwarfdump.1 $(man1dir)/dwarfdump.1
+-	$(INSTALL) $(srcdir)/dwarfdump.conf $(libdir)/dwarfdump.conf
++	$(INSTALL) dwarfdump $(DESTDIR)$(bindir)/dwarfdump
++	$(INSTALL) $(srcdir)/dwarfdump.1 $(DESTDIR)$(man1dir)/dwarfdump.1
++	$(INSTALL) $(srcdir)/dwarfdump.conf $(DESTDIR)$(sysconfdir)/dwarfdump.conf
+ 
+ uninstall:
+ 	-rm -f $(bindir)/dwarfdump
