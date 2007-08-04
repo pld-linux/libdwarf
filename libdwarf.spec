@@ -13,8 +13,6 @@ URL:		http://reality.sgiweb.org/davea/dwarf.html
 BuildRequires:	elfutils-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		specflags	-fPIC
-
 %description
 Library to read DWARF debug information of an ELF object.
 
@@ -63,7 +61,8 @@ Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
 
 %build
 cd libdwarf
-%configure
+%configure \
+	CFLAGS="%{rpmcflags} -fPIC"
 %{__make} libdwarf.a libdwarf.so
 cd ..
 cd dwarfdump
