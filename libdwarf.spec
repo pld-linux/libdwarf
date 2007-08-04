@@ -1,11 +1,12 @@
 Summary:	Library to read DWARF debug information of an ELF object
+Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-%define		_snap	20070703
-Version:	0.%{_snap}.1
+%define		snap	20070703
+Version:	0.%{snap}.1
 Release:	1
 License:	LGPL v2.1
 Group:		Libraries
-Source0:	http://reality.sgiweb.org/davea/%{name}-%{_snap}.tar.gz
+Source0:	http://reality.sgiweb.org/davea/%{name}-%{snap}.tar.gz
 # Source0-md5:	3c67d1df89f05421267ede59feec8152
 Patch0:		%{name}-makefile.patch
 URL:		http://reality.sgiweb.org/davea/dwarf.html
@@ -17,33 +18,48 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Library to read DWARF debug information of an ELF object.
 
+%description -l pl.UTF-8
+Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF.
+
 %package devel
 Summary:	Header files for libdwarf library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libdwarf
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for libdwarf library.
 
+%description devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki libdwarf.
+
 %package static
 Summary:	Static libdwarf library
+Summary(pl.UTF-8):	Statyczna biblioteka libdwarf
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static libdwarf library.
 
+%description static -l pl.UTF-8
+Statyczna biblioteka libdwarf.
+
 %package -n dwarfdump
 Summary:	Tool for dumps DWARF debug information of an ELF object
+Summary(pl.UTF-8):	Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF
 License:	GPL v2
 Group:		Development/Tools
 
 %description -n dwarfdump
 Tool for dumps DWARF debug information of an ELF object.
 
+%description -n dwarfdump -l pl.UTF-8
+Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
+
 %prep
-%setup -q -n dwarf-%{_snap}
-%patch -p1
+%setup -q -n dwarf-%{snap}
+%patch0 -p1
 
 %build
 cd libdwarf
@@ -85,6 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libdwarf.a
 
 %files -n dwarfdump
+%defattr(644,root,root,755)
 %doc dwarfdump/COPYING dwarfdump/ChangeLog* dwarfdump/NEWS dwarfdump/README
 %{_sysconfdir}/dwarfdump.conf
 %attr(755,root,root) %{_bindir}/dwarfdump
