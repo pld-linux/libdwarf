@@ -1,13 +1,13 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-%define		snap	20070703
+%define		snap	20080228
 Version:	0.%{snap}.1
 Release:	1
 License:	LGPL v2.1
 Group:		Libraries
 Source0:	http://reality.sgiweb.org/davea/%{name}-%{snap}.tar.gz
-# Source0-md5:	3c67d1df89f05421267ede59feec8152
+# Source0-md5:	d35831f2f19136848854d7bfc53396f6
 Patch0:		%{name}-makefile.patch
 URL:		http://reality.sgiweb.org/davea/dwarf.html
 BuildRequires:	elfutils-devel
