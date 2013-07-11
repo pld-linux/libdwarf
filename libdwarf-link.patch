@@ -1,0 +1,11 @@
+--- dwarf-20130207/libdwarf/Makefile.in.orig	2013-01-30 18:58:11.000000000 +0100
++++ dwarf-20130207/libdwarf/Makefile.in	2013-07-11 19:45:33.900021085 +0200
+@@ -132,7 +132,7 @@
+ 	$(AR) $(ARFLAGS) $@ $(OBJS)  dwarf_names.o
+ 
+ libdwarf.so: dwarf_names.h dwarf_names.c $(OBJS) dwarf_names.o
+-	$(CC) $(CFLAGS) -shared $(OBJS)  dwarf_names.o -o $@
++	$(CC) $(CFLAGS) -shared -Wl,-soname,libdwarf.so.0 $(OBJS)  dwarf_names.o -o $@ -lelf
+ 
+ none:
+ 	echo "do nothing"

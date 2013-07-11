@@ -10,6 +10,7 @@ Group:		Libraries
 Source0:	http://reality.sgiweb.org/davea/%{name}-%{snap}.tar.gz
 # Source0-md5:	64b42692e947d5180e162e46c689dfbf
 Patch0:		%{name}-makefile.patch
+Patch1:		%{name}-link.patch
 URL:		http://reality.sgiweb.org/davea/dwarf.html
 BuildRequires:	elfutils-devel
 BuildRequires:	libstdc++-devel
@@ -60,6 +61,7 @@ Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
 %prep
 %setup -q -n dwarf-%{snap}
 %patch0 -p1
+%patch1 -p1
 
 %build
 cd libdwarf
@@ -96,8 +98,11 @@ cd ..
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_bindir},%{_includedir},%{_libdir},%{_mandir}/man1}
 
-install libdwarf/libdwarf.h $RPM_BUILD_ROOT%{_includedir}
-install libdwarf/libdwarf.{a,so} $RPM_BUILD_ROOT%{_libdir}
+install libdwarf/libdwarf.so $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0.%{snap}
+ln -sf libdwarf.so.0.%{snap} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0
+ln -sf libdwarf.so.0.%{snap} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so
+install libdwarf/libdwarf.a $RPM_BUILD_ROOT%{_libdir}
+cp -p libdwarf/libdwarf.h $RPM_BUILD_ROOT%{_includedir}
 
 for d in dwarfdump ; do
 # dwarfdump2 is just a C++ version of dwarfdump
@@ -115,10 +120,12 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc libdwarf/CHANGES libdwarf/COPYING libdwarf/ChangeLog* libdwarf/NEWS libdwarf/README
-%attr(755,root,root) %{_libdir}/libdwarf.so
+%attr(755,root,root) %{_libdir}/libdwarf.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdwarf.so.0
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libdwarf.so
 %{_includedir}/libdwarf.h
 
 %files static
