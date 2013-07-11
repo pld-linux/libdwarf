@@ -1,16 +1,18 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-%define		snap	20120410
+%define		snap	20130207
 Version:	0.%{snap}.1
 Release:	1
-License:	LGPL v2.1
+License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
+#Source0Download:	http://reality.sgiweb.org/davea/dwarf.html
 Source0:	http://reality.sgiweb.org/davea/%{name}-%{snap}.tar.gz
-# Source0-md5:	77c8b351f11738bc9fa50474a69d5b36
+# Source0-md5:	64b42692e947d5180e162e46c689dfbf
 Patch0:		%{name}-makefile.patch
 URL:		http://reality.sgiweb.org/davea/dwarf.html
 BuildRequires:	elfutils-devel
+BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -62,6 +64,25 @@ Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
 %build
 cd libdwarf
 %configure \
+	--enable-shared
+%{__make}
+
+cd ../dwarfdump
+%configure
+%{__make}
+
+cd ../dwarfdump2
+%configure
+%{__make}
+
+cd ../dwarfgen
+%configure
+%{__make}
+
+%{__make}
+%if 0
+cd libdwarf
+%configure \
 	CFLAGS="%{rpmcflags} -fPIC"
 %{__make} libdwarf.a libdwarf.so
 cd ..
@@ -69,6 +90,7 @@ cd dwarfdump
 %configure
 %{__make} -j1
 cd ..
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -77,8 +99,12 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_bindir},%{_includedir},%{_libdir},%
 install libdwarf/libdwarf.h $RPM_BUILD_ROOT%{_includedir}
 install libdwarf/libdwarf.{a,so} $RPM_BUILD_ROOT%{_libdir}
 
-%{__make} -C dwarfdump install \
+for d in dwarfdump ; do
+# dwarfdump2 is just a C++ version of dwarfdump
+# dwarfgen is not really useful yet (just test/example program)
+%{__make} -C $d install \
 	DESTDIR=$RPM_BUILD_ROOT
+done
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -104,4 +130,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc dwarfdump/COPYING dwarfdump/ChangeLog* dwarfdump/NEWS dwarfdump/README
 %{_sysconfdir}/dwarfdump.conf
 %attr(755,root,root) %{_bindir}/dwarfdump
-%{_mandir}/man1/*
+%{_mandir}/man1/dwarfdump.1*
+
+%if 0
+# not really useful yet
+%files -n dwarfgen
+%defattr(644,root,root,755)
+%doc dwarfgen/{COPYING,ChangeLog,README}
+%{_sysconfdir}/dwarfgen.conf
+%attr(755,root,root) %{_bindir}/dwarfgen
+%{_mandir}/man1/dwarfgen.1*
+%endif
