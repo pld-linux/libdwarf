@@ -3,7 +3,7 @@ Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów
 Name:		libdwarf
 %define		snap	20130207
 Version:	0.%{snap}.1
-Release:	1
+Release:	2
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
 #Source0Download:	http://reality.sgiweb.org/davea/dwarf.html
