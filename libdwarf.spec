@@ -71,7 +71,8 @@ cd libdwarf
 
 cd ../dwarfdump
 %configure
-%{__make}
+# build races found
+%{__make} -j1
 
 cd ../dwarfdump2
 %configure
