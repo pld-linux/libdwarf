@@ -3,7 +3,7 @@ Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów
 Name:		libdwarf
 %define		snap	20130207
 Version:	0.%{snap}.1
-Release:	2
+Release:	3
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
 #Source0Download:	http://reality.sgiweb.org/davea/dwarf.html
@@ -67,7 +67,8 @@ Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
 cd libdwarf
 %configure \
 	--enable-shared
-%{__make}
+# build races found
+%{__make} -j1
 
 cd ../dwarfdump
 %configure
