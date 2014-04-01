@@ -1,17 +1,15 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-%define		snap	20130207
-Version:	0.%{snap}.1
-Release:	3
+Version:	20130729
+Release:	1
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
-#Source0Download:	http://reality.sgiweb.org/davea/dwarf.html
-Source0:	http://reality.sgiweb.org/davea/%{name}-%{snap}.tar.gz
-# Source0-md5:	64b42692e947d5180e162e46c689dfbf
+Source0:	http://www.prevanders.net/%{name}-%{version}.tar.gz
+# Source0-md5:	4cc5e48693f7b93b7aa0261e63c0e21d
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-link.patch
-URL:		http://reality.sgiweb.org/davea/dwarf.html
+URL:		http://www.prevanders.net/dwarf.html
 BuildRequires:	elfutils-devel
 BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -59,7 +57,7 @@ Tool for dumps DWARF debug information of an ELF object.
 Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
 
 %prep
-%setup -q -n dwarf-%{snap}
+%setup -q -n dwarf-%{version}
 %patch0 -p1
 %patch1 -p1
 
@@ -101,17 +99,17 @@ cd ..
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_bindir},%{_includedir},%{_libdir},%{_mandir}/man1}
 
-install libdwarf/libdwarf.so $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0.%{snap}
-ln -sf libdwarf.so.0.%{snap} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0
-ln -sf libdwarf.so.0.%{snap} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so
-install libdwarf/libdwarf.a $RPM_BUILD_ROOT%{_libdir}
+install -p libdwarf/libdwarf.so $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0.%{version}
+ln -s libdwarf.so.0.%{version} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0
+ln -s libdwarf.so.0.%{version} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so
+cp -p libdwarf/libdwarf.a $RPM_BUILD_ROOT%{_libdir}
 cp -p libdwarf/libdwarf.h $RPM_BUILD_ROOT%{_includedir}
 
-for d in dwarfdump ; do
-# dwarfdump2 is just a C++ version of dwarfdump
-# dwarfgen is not really useful yet (just test/example program)
-%{__make} -C $d install \
-	DESTDIR=$RPM_BUILD_ROOT
+for d in dwarfdump; do
+	# dwarfdump2 is just a C++ version of dwarfdump
+	# dwarfgen is not really useful yet (just test/example program)
+	%{__make} -C $d install \
+		DESTDIR=$RPM_BUILD_ROOT
 done
 
 %clean
