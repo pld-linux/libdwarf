@@ -1,12 +1,12 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-Version:	20130729
+Version:	20140208
 Release:	1
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
 Source0:	http://www.prevanders.net/%{name}-%{version}.tar.gz
-# Source0-md5:	4cc5e48693f7b93b7aa0261e63c0e21d
+# Source0-md5:	4dc74e08a82fa1d3cab6ca6b9610761e
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-link.patch
 URL:		http://www.prevanders.net/dwarf.html
@@ -62,38 +62,24 @@ Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
 %patch1 -p1
 
 %build
+die() { echo >&2 "$*"; exit 1; }
 cd libdwarf
 %configure \
 	--enable-shared
 # build races found
-%{__make} -j1
+%{__make} -j1 || die "make lib failed"
 
 cd ../dwarfdump
 %configure
-# build races found
-%{__make} -j1
+%{__make} || die "make dwarfdump failed"
 
 cd ../dwarfdump2
 %configure
-# build races found
-%{__make} -j1
+%{__make} || die "make dwarfdump2 failed"
 
 cd ../dwarfgen
 %configure
-%{__make}
-
-%{__make}
-%if 0
-cd libdwarf
-%configure \
-	CFLAGS="%{rpmcflags} -fPIC"
-%{__make} libdwarf.a libdwarf.so
-cd ..
-cd dwarfdump
-%configure
-%{__make} -j1
-cd ..
-%endif
+%{__make} || die "make dwarfgen failed"
 
 %install
 rm -rf $RPM_BUILD_ROOT
