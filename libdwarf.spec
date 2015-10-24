@@ -1,12 +1,13 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-Version:	20140208
-Release:	2
+Version:	20150915
+Release:	1
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
+#Source0Download: http://www.prevanders.net/dwarf.html
 Source0:	http://www.prevanders.net/%{name}-%{version}.tar.gz
-# Source0-md5:	4dc74e08a82fa1d3cab6ca6b9610761e
+# Source0-md5:	08d243ea44e39ceb15f72c1066857cc1
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-link.patch
 URL:		http://www.prevanders.net/dwarf.html
@@ -73,10 +74,6 @@ cd ../dwarfdump
 %configure
 %{__make} || die "make dwarfdump failed"
 
-cd ../dwarfdump2
-%configure
-%{__make} || die "make dwarfdump2 failed"
-
 cd ../dwarfgen
 %configure
 %{__make} || die "make dwarfgen failed"
@@ -92,7 +89,6 @@ cp -p libdwarf/libdwarf.a $RPM_BUILD_ROOT%{_libdir}
 cp -p libdwarf/libdwarf.h $RPM_BUILD_ROOT%{_includedir}
 
 for d in dwarfdump; do
-	# dwarfdump2 is just a C++ version of dwarfdump
 	# dwarfgen is not really useful yet (just test/example program)
 	%{__make} -C $d install \
 		DESTDIR=$RPM_BUILD_ROOT
