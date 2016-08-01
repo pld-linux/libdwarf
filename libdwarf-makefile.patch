@@ -1,5 +1,5 @@
---- dwarf-20160115/dwarfdump/Makefile.in.orig	2016-01-12 20:30:41.000000000 +0100
-+++ dwarf-20160115/dwarfdump/Makefile.in	2016-04-05 17:12:42.762703533 +0200
+--- dwarf-20160613/dwarfdump/Makefile.in.orig	2016-06-03 22:12:37.000000000 +0200
++++ dwarf-20160613/dwarfdump/Makefile.in	2016-07-31 21:01:28.765993963 +0200
 @@ -11,7 +11,7 @@
  prefix =	@prefix@
  exec_prefix =	@exec_prefix@
@@ -13,14 +13,14 @@
  DIRINC =        $(srcdir)/../libdwarf
  LIBS =		@LIBS@ -L../libdwarf -ldwarf -lelf $(dwfzlib)
  INCLUDES =	-I. -I$(srcdir) -I../libdwarf -I$(srcdir)/../libdwarf
--CFLAGS =	$(PREINCS) @CFLAGS@ $(INCLUDES) $(dwfwall) -DCONFPREFIX=${libdir} $(POSTINCS)
+-CFLAGS =	$(PREINCS) @CPPFLAGS@ @CFLAGS@ $(INCLUDES) $(dwfwall) -DCONFPREFIX=${libdir} $(POSTINCS)
 -LDFLAGS =	$(PRELIBS) @LDFLAGS@  $(LIBS) $(POSTLIBS)
-+CFLAGS =	$(PREINCS) @CFLAGS@ $(INCLUDES) $(dwfwall) -DCONFPREFIX=${sysconfdir} $(POSTINCS)
++CFLAGS =	$(PREINCS) @CPPFLAGS@ @CFLAGS@ $(INCLUDES) $(dwfwall) -DCONFPREFIX=${sysconfdir} $(POSTINCS)
 +LDFLAGS =	$(PRELIBS) @LDFLAGS@ -Wl,-rpath,../libdwarf $(LIBS) $(POSTLIBS)
  #VG =            valgrind --leak-check=full
  VG =
  
-@@ -190,9 +190,9 @@
+@@ -194,9 +194,9 @@
  # will work and leave sensible permissions on the resulting files.
  # Some adjustment might be required, see README.
  install: all

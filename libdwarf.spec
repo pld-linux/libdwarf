@@ -1,13 +1,13 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-Version:	20160507
+Version:	20160613
 Release:	1
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
 #Source0Download: https://www.prevanders.net/dwarf.html
 Source0:	https://www.prevanders.net/%{name}-%{version}.tar.gz
-# Source0-md5:	ae32d6f9ece5daf05e2d4b14822ea811
+# Source0-md5:	2e0f0ef6546b2155f53e2a4ed65bc44a
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-link.patch
 URL:		https://www.prevanders.net/dwarf.html
@@ -82,9 +82,9 @@ cd ../dwarfgen
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_bindir},%{_includedir},%{_libdir},%{_mandir}/man1}
 
-install -p libdwarf/libdwarf.so $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0.%{version}
-ln -s libdwarf.so.0.%{version} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.0
-ln -s libdwarf.so.0.%{version} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so
+install -p libdwarf/libdwarf.so.1 $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.1.%{version}
+ln -s libdwarf.so.1.%{version} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so.1
+ln -s libdwarf.so.1.%{version} $RPM_BUILD_ROOT%{_libdir}/libdwarf.so
 cp -p libdwarf/libdwarf.a $RPM_BUILD_ROOT%{_libdir}
 cp -p libdwarf/libdwarf.h $RPM_BUILD_ROOT%{_includedir}
 
@@ -104,7 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc libdwarf/CHANGES libdwarf/COPYING libdwarf/ChangeLog* libdwarf/NEWS libdwarf/README
 %attr(755,root,root) %{_libdir}/libdwarf.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdwarf.so.0
+%attr(755,root,root) %ghost %{_libdir}/libdwarf.so.1
 
 %files devel
 %defattr(644,root,root,755)

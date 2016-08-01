@@ -1,11 +1,11 @@
---- dwarf-20160115/libdwarf/Makefile.in.orig	2016-04-05 17:13:20.829368602 +0200
-+++ dwarf-20160115/libdwarf/Makefile.in	2016-04-05 17:18:41.089355162 +0200
-@@ -129,7 +129,7 @@
+--- dwarf-20160613/libdwarf/Makefile.in.orig	2016-06-08 17:26:52.000000000 +0200
++++ dwarf-20160613/libdwarf/Makefile.in	2016-07-31 21:21:57.395979934 +0200
+@@ -132,7 +132,7 @@
  	$(AR) $(ARFLAGS) $@ $(OBJS)  dwarf_names.o > ar-output-temp
  
  libdwarf.so: dwarf_names.h dwarf_names.c $(OBJS) dwarf_names.o
--	$(CC) $(CFLAGS) -shared $(OBJS)  dwarf_names.o $(dwfzlib) -o $@
-+	$(CC) $(CFLAGS) -shared -Wl,-soname,libdwarf.so.0 $(OBJS)  dwarf_names.o $(dwfzlib) -o $@ -lelf
+-	$(CC) $(CFLAGS) $(LDFLAGS) -shared $(OBJS) -Wl,-soname=$(SONAME)  dwarf_names.o $(dwfzlib) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -shared $(OBJS) -Wl,-soname=$(SONAME)  dwarf_names.o $(dwfzlib) -o $@ -lelf
+ 	ln libdwarf.so $(SONAME)
  
  none:
- 	echo "do nothing " $@
