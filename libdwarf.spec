@@ -1,17 +1,22 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-Version:	20191104
+Version:	0.11.0
 Release:	1
+Epoch:		1
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
-#Source0Download: https://www.prevanders.net/dwarf.html
-Source0:	https://www.prevanders.net/%{name}-%{version}.tar.gz
-# Source0-md5:	f5927304b32525f93bccefe2828e802d
+#Source0Download: https://www.prevanders.net/dwarf.html#releases
+Source0:	https://www.prevanders.net/%{name}-%{version}.tar.xz
+# Source0-md5:	3dab70d5f953acde7fcdd76230f210e0
 URL:		https://www.prevanders.net/dwarf.html
-BuildRequires:	elfutils-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	pkgconfig
+BuildRequires:	rpm-build >= 4.6
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRequires:	zlib-devel
+BuildRequires:	zstd-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -24,9 +29,9 @@ Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF.
 Summary:	Header files for libdwarf library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libdwarf
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	elfutils-devel
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	zlib-devel
+Requires:	zstd-devel
 
 %description devel
 Header files for libdwarf library.
@@ -38,13 +43,74 @@ Pliki nagłówkowe biblioteki libdwarf.
 Summary:	Static libdwarf library
 Summary(pl.UTF-8):	Statyczna biblioteka libdwarf
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 Static libdwarf library.
 
 %description static -l pl.UTF-8
 Statyczna biblioteka libdwarf.
+
+%package apidocs
+Summary:	API documentation for libdwarf library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki libdwarf
+Group:		Documentation
+BuildArch:	noarch
+
+%description apidocs
+API documentation for libdwarf library.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API biblioteki libdwarf.
+
+%package -n libdwarfp
+Summary:	Library to produce DWARF debug symbols
+Summary(pl.UTF-8):	Biblioteka do tworzenia symboli debugowych DWARF
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description -n libdwarfp
+Library to produce DWARF debug symbols.
+
+%description -n libdwarfp -l pl.UTF-8
+Biblioteka do tworzenia symboli debugowych DWARF.
+
+%package -n libdwarfp-devel
+Summary:	Header files for libdwarfp library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libdwarfp
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
+Requires:	libdwarfp-devel = %{epoch}:%{version}-%{release}
+
+%description -n libdwarfp-devel
+Header files for libdwarfp library.
+
+%description -n libdwarfp-devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki libdwarfp.
+
+%package -n libdwarfp-static
+Summary:	Static libdwarfp library
+Summary(pl.UTF-8):	Statyczna biblioteka libdwarfp
+Group:		Development/Libraries
+Requires:	libdwarfp-devel = %{epoch}:%{version}-%{release}
+
+%description -n libdwarfp-static
+Static libdwarf libraryp.
+
+%description -n libdwarfp-static -l pl.UTF-8
+Statyczna biblioteka libdwarfp.
+
+%package -n libdwarfp-apidocs
+Summary:	API documentation for libdwarf library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki libdwarf
+Group:		Documentation
+BuildArch:	noarch
+
+%description -n libdwarfp-apidocs
+API documentation for libdwarf library.
+
+%description -n libdwarfp-apidocs -l pl.UTF-8
+Dokumentacja API biblioteki libdwarf.
 
 %package -n dwarfdump
 Summary:	Tool for dumps DWARF debug information of an ELF object
@@ -58,11 +124,24 @@ Tool for dumps DWARF debug information of an ELF object.
 %description -n dwarfdump -l pl.UTF-8
 Narzędzie wypisujące informacje debugowe DWARF z obiektów ELF.
 
+%package -n dwarfgen
+Summary:	Example DWARF data generator
+Summary(pl.UTF-8):	Przykładowy generator informacji DWARF
+Group:		Development/Tools
+Requires:	libdwarfp = %{epoch}:%{version}-%{release}
+
+%description -n dwarfgen
+dwarfgen creates DWARF sections as requested by specific options.
+
+%description -n dwarfgen -l pl.UTF-8
+dwarfgen tworzy sekcje DWARF zgodnie z konkretnymi opcjami.
+
 %prep
 %setup -q
 
 %build
 %configure \
+	--enable-dwarfgen \
 	--enable-shared \
 	--disable-silent-rules
 
@@ -74,11 +153,13 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# (another implementation) provided by elfutils
-%{__rm} $RPM_BUILD_ROOT%{_includedir}/dwarf.h
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libdwarf*.la
 
-# packaged as %doc
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/libdwarf/libdwarf-devel
+# substitutions missing in configure
+%{__sed} -e 's,@requirements_libdwarfp_pc@,,' \
+	-e 's,@requirements_libdwarfp_libs@,,' \
+	-i $RPM_BUILD_ROOT%{_pkgconfigdir}/libdwarfp.pc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -88,34 +169,55 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc libdwarf/{CHANGES,COPYING,ChangeLog*,NEWS,README}
-%attr(755,root,root) %{_libdir}/libdwarf.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdwarf.so.1
+%doc README.md src/lib/libdwarf/{CHANGES,COPYING,NEWS,README}
+%attr(755,root,root) %{_libdir}/libdwarf.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdwarf.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%doc libdwarf/libdwarf*.pdf
 %attr(755,root,root) %{_libdir}/libdwarf.so
-%{_libdir}/libdwarf.la
-%{_includedir}/libdwarf.h
+%dir %{_includedir}/libdwarf-0
+%{_includedir}/libdwarf-0/dwarf.h
+%{_includedir}/libdwarf-0/libdwarf.h
+%{_pkgconfigdir}/libdwarf.pc
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libdwarf.a
 
+%files apidocs
+%defattr(644,root,root,755)
+%doc doc/libdwarf.pdf
+
+%files -n libdwarfp
+%defattr(644,root,root,755)
+%doc src/lib/libdwarfp/{COPYING,NEWS,README}
+%attr(755,root,root) %{_libdir}/libdwarfp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdwarfp.so.0
+
+%files -n libdwarfp-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libdwarfp.so
+%{_includedir}/libdwarf-0/libdwarfp.h
+%{_pkgconfigdir}/libdwarfp.pc
+
+%files -n libdwarfp-static
+%defattr(644,root,root,755)
+%{_libdir}/libdwarfp.a
+
+%files -n libdwarfp-apidocs
+%defattr(644,root,root,755)
+%doc doc/libdwarfp.pdf
+
 %files -n dwarfdump
 %defattr(644,root,root,755)
-%doc dwarfdump/{COPYING,ChangeLog*,NEWS,README}
+%doc src/bin/dwarfdump/{COPYING,NEWS,README}
 %attr(755,root,root) %{_bindir}/dwarfdump
 %{_datadir}/dwarfdump
 %{_mandir}/man1/dwarfdump.1*
 
-%if 0
-# not really useful yet
 %files -n dwarfgen
 %defattr(644,root,root,755)
-%doc dwarfgen/{COPYING,ChangeLog,README}
-%{_sysconfdir}/dwarfgen.conf
+%doc src/bin/dwarfgen/{COPYING,NEWS,README}
 %attr(755,root,root) %{_bindir}/dwarfgen
 %{_mandir}/man1/dwarfgen.1*
-%endif
