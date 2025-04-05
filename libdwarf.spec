@@ -1,14 +1,14 @@
 Summary:	Library to read DWARF debug information of an ELF object
 Summary(pl.UTF-8):	Biblioteka do odczytu informacji debugowych DWARF z obiektów ELF
 Name:		libdwarf
-Version:	0.11.0
+Version:	0.12.0
 Release:	1
 Epoch:		1
 License:	LGPL v2.1 (library), GPL v2 (utilities)
 Group:		Libraries
 #Source0Download: https://www.prevanders.net/dwarf.html#releases
 Source0:	https://www.prevanders.net/%{name}-%{version}.tar.xz
-# Source0-md5:	3dab70d5f953acde7fcdd76230f210e0
+# Source0-md5:	5253c12000053405b12734f1b8120c76
 URL:		https://www.prevanders.net/dwarf.html
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
